@@ -3,6 +3,7 @@
 <head>
     <title>Car Accessories</title>
     <link rel="stylesheet" href="/css/global.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <h1>Car Accessories</h1>
@@ -32,28 +33,23 @@
 
     <script>
         function addItem() {
-            var accessorySelect = document.getElementById("accessory-select");
-            var selectedAccessory = accessorySelect.options[accessorySelect.selectedIndex].text;
-            var selectedAccessoryValue = accessorySelect.options[accessorySelect.selectedIndex].value;
-            var amountInput = document.getElementById("amount-input");
-            var amount = parseInt(amountInput.value);
-            var price = parseFloat(selectedAccessoryValue);
-            var productTable = document.getElementById("product-list");
+            var accessorySelect = $("#accessory-select");
+            var selectedAccessory = accessorySelect.find("option:selected").text();
+            var selectedAccessoryValue = parseFloat(accessorySelect.find("option:selected").val());
+            var amount = parseInt($("#amount-input").val());
+            var price = selectedAccessoryValue;
 
             // Add the new item to the product list
-            var row = productTable.insertRow(-1);
-            var accessoryCell = row.insertCell(0);
-            var amountCell = row.insertCell(1);
-            var priceCell = row.insertCell(2);
-            
-            accessoryCell.innerHTML = selectedAccessory;
-            amountCell.innerHTML = amount;
-            priceCell.innerHTML = "$" + (price * amount).toFixed(2);
+            var newRow = $("<tr>");
+            newRow.append($("<td>").text(selectedAccessory));
+            newRow.append($("<td>").text(amount));
+            newRow.append($("<td>").text("$" + (price * amount).toFixed(2)));
+            $("#product-list").append(newRow);
             
             // Calculate the total price
-            var totalPriceElement = document.getElementById("total-price");
-            var totalPrice = parseFloat(totalPriceElement.innerHTML.substring(1)) + (price * amount);
-            totalPriceElement.innerHTML = "$" + totalPrice.toFixed(2);
+            var totalPriceElement = $("#total-price");
+            var totalPrice = parseFloat(totalPriceElement.text().substring(1)) + (price * amount);
+            totalPriceElement.text("$" + totalPrice.toFixed(2));
 
             // Calculate the VAT and total price after VAT
             var vatRate = 0.07;
@@ -61,8 +57,8 @@
             var totalPriceVat = totalPrice + vatPrice;
 
             // Update the VAT and total price after VAT on the webpage
-            document.getElementById("vat-price").innerHTML = "$" + vatPrice.toFixed(2);
-            document.getElementById("total-price-vat").innerHTML = "$" + totalPriceVat.toFixed(2);
+            $("#vat-price").text("$" + vatPrice.toFixed(2));
+            $("#total-price-vat").text("$" + totalPriceVat.toFixed(2));
         }
     </script>
 </body>
